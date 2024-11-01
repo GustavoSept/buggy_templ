@@ -15,14 +15,9 @@ import (
 	"webapp/utils/types"
 )
 
-func elementWrapperStyle(element types.Element) templ.CSSClass {
-	templ_7745c5c3_CSSBuilder := templruntime.GetBuilder()
-	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`grid-column`, strconv.Itoa(element.ColNum))))
-	templ_7745c5c3_CSSBuilder.WriteString(string(templ.SanitizeCSS(`grid-row`, strconv.Itoa(element.RowNum))))
-	templ_7745c5c3_CSSID := templ.CSSID(`elementWrapperStyle`, templ_7745c5c3_CSSBuilder.String())
-	return templ.ComponentCSSClass{
-		ID:    templ_7745c5c3_CSSID,
-		Class: templ.SafeCSS(`.` + templ_7745c5c3_CSSID + `{` + templ_7745c5c3_CSSBuilder.String() + `}`),
+func elementWrapperStyle(element types.Element) templ.Attributes {
+	return templ.Attributes{
+		"style": "grid-column: " + strconv.Itoa(element.ColNum) + "; grid-row: " + strconv.Itoa(element.RowNum) + ";",
 	}
 }
 
@@ -64,25 +59,15 @@ func Home() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for _, element := range constants.PeriodicTable {
-				var templ_7745c5c3_Var3 = []any{elementWrapperStyle(element)}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var3...)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"")
+				templ_7745c5c3_Err = templ.RenderAttributes(ctx, templ_7745c5c3_Buffer, elementWrapperStyle(element))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var3).String())
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/home.templ`, Line: 1, Col: 0}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

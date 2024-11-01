@@ -7,20 +7,20 @@ import (
     "strconv"
 )
 
-css elementWrapperStyle(element types.Element){
-    grid-column: { strconv.Itoa(element.ColNum) };
-    grid-row: { strconv.Itoa(element.RowNum) };
+func elementWrapperStyle(element types.Element) templ.Attributes {
+    return templ.Attributes{
+        "style": "grid-column: " + strconv.Itoa(element.ColNum) + "; grid-row: " + strconv.Itoa(element.RowNum) + ";",
+    }
 }
 
 templ Home() {
     @BaseBare("home") {
         <div class="periodicTableGrid">
             for _, element := range constants.PeriodicTable {
-                <div class={ elementWrapperStyle(element) }>
+                <div { elementWrapperStyle(element)... }>
                     @ui.ElementBlock(element)
                 </div>
             }
         </div>
     }
 }
-
