@@ -1,0 +1,94 @@
+package ui
+
+import "webapp/utils/types"
+import "strconv"
+import "fmt"
+
+var elemBlockStyle = templ.NewOnceHandle()
+
+templ elementBlockSyle() {
+    <style>
+        .elementBlock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            width: 4rem;
+            height: 4rem;
+            margin: 0.3rem;
+            color: #1a1b1b; /* Text color */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .elementBlock::before {
+            content: '';
+            position: absolute;
+            top: 0.15rem;
+            right: 0.15rem;
+            bottom: 0.15rem;
+            left: 0.15rem;
+            border: 0.08rem solid rgba(239, 239, 239, 0.25);  /* Thin dark stroke */
+            pointer-events: none;
+            border-radius: 0.5rem; /* Match border radius of the element */
+        }
+
+        .elementBlock:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0.5rem 0.9375rem rgba(0, 0, 0, 0.2);
+        }
+
+        .elementBlock:active {
+            transform: scale(1.05);
+            box-shadow: 0 0.375rem 0.625rem rgba(0, 0, 0, 0.3);
+        }
+
+        .elementSymbol {
+            font-size: 190%;
+            font-weight: bold;
+            margin-top: -25%;
+            margin-left: -5%;
+            letter-spacing: -0.1em;
+        }
+
+        .elementAtomicNumber {
+            font-size: 40%;
+            position: absolute;
+            top: 5%;
+            left: 10%;
+        }
+
+        .elementName {
+            font-size: 40%;
+            margin-top: -10%;
+            margin-bottom: 2%;
+        }
+
+        .periodicTableGrid {
+            display: grid;
+            grid-template-columns: repeat(18, minmax(4rem, 4.5rem)); /* Fixed min and max width for columns */
+            grid-auto-rows: minmax(2rem, auto); /* Minimum height for rows */
+            gap: 0.5rem; /* Adjust gap between cells */
+            max-width: calc(18 * 4.5rem + 17 * 0.5rem); /* Ensure max grid width */
+            margin: 0 auto; /* Center the grid horizontally */
+        }
+    </style>
+}
+
+css elementGradientBackground(color string) {
+    background: { templ.SafeCSSProperty(fmt.Sprintf("linear-gradient(135deg, %s33, %s99)", color, color)) };
+}
+
+templ ElementBlock(element types.Element) {
+    @elemBlockStyle.Once(){@elementBlockSyle()}
+
+    <div class={ "elementBlock", elementGradientBackground(element.Color) }>
+        <div class="elementSymbol">{element.Symbol}</div>
+        <div class="elementAtomicNumber">{strconv.Itoa(element.AtomicNumber)}</div>
+        <div class="elementName">{element.Name}</div>
+    </div>
+}
