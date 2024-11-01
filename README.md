@@ -2,7 +2,7 @@
 
 ### Build
 
-Have docker compose installed
+Have docker installed. Run the following command, from inside `src` directory:
 
 ```bash
 docker compose up -d --build
